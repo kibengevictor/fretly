@@ -1,0 +1,66 @@
+import { Lesson } from '../types';
+
+export const lessons: Lesson[] = [
+  {
+    id: 'lesson-1',
+    level: 'beginner',
+    order: 1,
+    title: 'First chord: Em',
+    content: 'Build a relaxed E minor shape and make every open string ring.',
+    summary: 'Your first chord uses only two fingers, so you can focus on a clean sound.',
+    steps: [
+      'Place your middle finger on the 5th string, 2nd fret.',
+      'Place your ring finger on the 4th string, 2nd fret.',
+      'Keep the other fingers relaxed and strum all six strings slowly.',
+      'Check that each string sounds clear instead of buzzing or being muted.',
+    ],
+    practiceTip: 'Strum one string at a time from the thickest string to the thinnest string.',
+    chordIds: ['em'],
+  },
+  {
+    id: 'lesson-2',
+    level: 'beginner',
+    order: 2,
+    title: 'Am and chord changes',
+    content: 'Learn A minor, then move between Em and Am without rushing.',
+    summary: 'Two comfortable open chords are enough to start practising smooth changes.',
+    steps: [
+      'Place your index finger on the 2nd string, 1st fret.',
+      'Place your middle finger on the 4th string, 2nd fret.',
+      'Place your ring finger on the 3rd string, 2nd fret.',
+      'Strum from the 5th string down, then slowly return to Em.',
+    ],
+    practiceTip: 'Lift your fingers only as far as needed. Small movements make faster changes.',
+    drill: {
+      title: 'Two-chord change drill',
+      description: 'Play four slow strums on each chord, then switch when the count starts again.',
+      tempo: 60,
+      chordIds: ['em', 'am'],
+    },
+    prerequisites: ['lesson-1'],
+    chordIds: ['am', 'em'],
+  },
+  {
+    id: 'lesson-3',
+    level: 'beginner',
+    order: 3,
+    title: 'Open chords: E, A, D',
+    content: 'Add three essential major chords and practise choosing the right strings.',
+    summary: 'These major chords are building blocks for many beginner songs.',
+    steps: [
+      'Make each chord shape shown below one at a time.',
+      'Mute any string marked with an X and leave open strings marked with O clear.',
+      'Strum slowly and listen for buzzing before changing chords.',
+      'Use the change drill to connect E, A, and D.',
+    ],
+    practiceTip: 'Keep your thumb behind the neck and leave a small space between your palm and the guitar.',
+    drill: {
+      title: 'Three-chord change drill',
+      description: 'Play four strums each on E, A, and D at a steady pace.',
+      tempo: 60,
+      chordIds: ['e', 'a', 'd'],
+    },
+    prerequisites: ['lesson-2'],
+    chordIds: ['e', 'a', 'd'],
+  },
+];
