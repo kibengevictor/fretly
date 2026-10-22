@@ -21,7 +21,7 @@ const COLORS = {
 };
 
 export default function Tuner() {
-  const { settings, updateSettings } = useSettings();
+  const { settings } = useSettings();
   const [selectedTuning, setSelectedTuning] = useState(builtInTunings[0]);
   const [manualString, setManualString] = useState<number | null>(null);
   const [stringStatus, setStringStatus] = useState<Record<number, StringStatus>>({});
@@ -240,19 +240,7 @@ export default function Tuner() {
 
       <View style={styles.controls}>
         <View style={styles.a4Container}>
-          <TouchableOpacity
-            style={styles.smallButton}
-            onPress={() => updateSettings({ a4Frequency: Math.max(430, settings.a4Frequency - 1) })}
-          >
-            <Text style={styles.smallButtonText}>-</Text>
-          </TouchableOpacity>
           <Text style={styles.a4Label}>A4 {settings.a4Frequency} Hz</Text>
-          <TouchableOpacity
-            style={styles.smallButton}
-            onPress={() => updateSettings({ a4Frequency: Math.min(450, settings.a4Frequency + 1) })}
-          >
-            <Text style={styles.smallButtonText}>+</Text>
-          </TouchableOpacity>
         </View>
 
         <TouchableOpacity
@@ -477,18 +465,6 @@ const styles = StyleSheet.create({
     color: '#c0c7d0',
     minWidth: 78,
     textAlign: 'center',
-  },
-  smallButton: {
-    backgroundColor: '#252a31',
-    width: 34,
-    height: 34,
-    borderRadius: 17,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  smallButtonText: {
-    fontSize: 18,
-    color: '#c0c7d0',
   },
   micButton: {
     backgroundColor: '#1ed19a',

@@ -2,6 +2,7 @@
   "expo": {
     "name": "fretly-app",
     "slug": "fretly-app",
+    "scheme": "fretly",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -10,9 +11,11 @@
       "supportsTablet": true,
       "infoPlist": {
         "NSMicrophoneUsageDescription": "Fretly listens through the microphone to detect your instrument's pitch for tuning."
-      }
+      },
+      "bundleIdentifier": "com.kibengevictor.fretly"
     },
     "android": {
+      "package": "com.kibengevictor.fretly",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/android-icon-foreground.png",
@@ -20,7 +23,11 @@
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false,
-      "permissions": ["RECORD_AUDIO"]
+      "permissions": [
+        "RECORD_AUDIO",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.MODIFY_AUDIO_SETTINGS"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"

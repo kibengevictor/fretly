@@ -1,4 +1,6 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import { fetchProgress, saveProgress } from '../services/progressApi';
+import { useAuth } from './AuthContext';
 
 export interface Progress {
   completedLessons: string[];
@@ -28,7 +30,26 @@ const defaultProgress: Progress = {
 const ProgressContext = createContext<ProgressContextType | undefined>(undefined);
 
 export function ProgressProvider({ children }: { children: ReactNode }) {
+  const { user } = useAuth();
   const [progress, setProgress] = useState<Progress>(defaultProgress);
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    setHydrated(false);
+    setProgress(defaultProgress);
+    fetchProgress().then((remote) => {
+      if (remote) setProgress(remote);
+    }).catch(() => {
+      // Local progress remains usable when the account API is unavailable.
+    }).finally(() => setHydrated(true));
+  }, [user?.id]);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    saveProgress(progress).catch(() => {
+      // The in-memory state remains authoritative until the next successful sync.
+    });
+  }, [hydrated, progress]);
 
   const markLessonComplete = (lessonId: string) => {
     setProgress((prev) => ({

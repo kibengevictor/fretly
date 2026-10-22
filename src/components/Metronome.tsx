@@ -1,98 +1,58 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 export default function Metronome() {
-  const [bpm, setBpm] = useState(120);
-  const [timeSignature, setTimeSignature] = useState(4);
+  const [bpm, setBpm] = useState(80);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [beat, setBeat] = useState(0);
+
+  useEffect(() => {
+    if (!isPlaying) return;
+    const timer = setInterval(() => setBeat((current) => (current + 1) % 4), 60000 / bpm);
+    return () => clearInterval(timer);
+  }, [bpm, isPlaying]);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Metronome</Text>
-      <Text style={styles.bpmText}>{bpm} BPM</Text>
-
-      <View style={styles.controls}>
-        <TouchableOpacity
-          style={styles.controlButton}
-          onPress={() => setBpm(Math.max(30, bpm - 5))}
-        >
-          <Text>-5</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.controlButton}
-          onPress={() => setBpm(Math.max(30, bpm - 1))}
-        >
-          <Text>-1</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.controlButton}
-          onPress={() => setBpm(Math.min(240, bpm + 1))}
-        >
-          <Text>+1</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.controlButton}
-          onPress={() => setBpm(Math.min(240, bpm + 5))}
-        >
-          <Text>+5</Text>
-        </TouchableOpacity>
+    <View style={styles.card}>
+      <View style={styles.header}>
+        <View>
+          <Text style={styles.kicker}>TIMING</Text>
+          <Text style={styles.title}>Metronome</Text>
+        </View>
+        <Text style={styles.bpm}>{bpm} <Text style={styles.unit}>BPM</Text></Text>
       </View>
-
-      <TouchableOpacity
-        style={[styles.playButton, isPlaying && styles.playButtonActive]}
-        onPress={() => setIsPlaying(!isPlaying)}
-      >
-        <Text style={styles.playButtonText}>{isPlaying ? 'Stop' : 'Start'}</Text>
-      </TouchableOpacity>
-
-      <Text style={styles.infoText}>FR-PR-1: Adjustable tempo 30-240 BPM</Text>
+      <View style={styles.beats}>
+        {[0, 1, 2, 3].map((item) => <View key={item} style={[styles.beat, beat === item && isPlaying && styles.beatActive]} />)}
+      </View>
+      <View style={styles.controls}>
+        <Pressable style={styles.adjust} onPress={() => setBpm((value) => Math.max(30, value - 5))}><Text style={styles.adjustText}>−5</Text></Pressable>
+        <Pressable style={styles.adjust} onPress={() => setBpm((value) => Math.max(30, value - 1))}><Text style={styles.adjustText}>−1</Text></Pressable>
+        <Pressable style={styles.adjust} onPress={() => setBpm((value) => Math.min(240, value + 1))}><Text style={styles.adjustText}>+1</Text></Pressable>
+        <Pressable style={styles.adjust} onPress={() => setBpm((value) => Math.min(240, value + 5))}><Text style={styles.adjustText}>+5</Text></Pressable>
+      </View>
+      <Pressable style={[styles.play, isPlaying && styles.stop]} onPress={() => setIsPlaying((value) => !value)}>
+        <Text style={styles.playText}>{isPlaying ? 'Stop metronome' : 'Start metronome'}</Text>
+      </Pressable>
+      <Text style={styles.hint}>Use a slow tempo first. Increase it only when every chord change is clean.</Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    alignItems: 'center',
-    padding: 20,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  bpmText: {
-    fontSize: 48,
-    fontWeight: 'bold',
-    marginBottom: 30,
-  },
-  controls: {
-    flexDirection: 'row',
-    gap: 10,
-    marginBottom: 30,
-  },
-  controlButton: {
-    backgroundColor: '#f0f0f0',
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    borderRadius: 4,
-  },
-  playButton: {
-    backgroundColor: '#4CAF50',
-    paddingHorizontal: 40,
-    paddingVertical: 15,
-    borderRadius: 8,
-    marginBottom: 20,
-  },
-  playButtonActive: {
-    backgroundColor: '#F44336',
-  },
-  playButtonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: '600',
-  },
-  infoText: {
-    fontSize: 12,
-    color: '#666',
-  },
+  card: { backgroundColor: '#17202b', borderRadius: 16, padding: 18, marginBottom: 14 },
+  header: { flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between' },
+  kicker: { color: '#31c778', fontSize: 11, fontWeight: '800', letterSpacing: 1.3 },
+  title: { color: '#fff', fontSize: 21, fontWeight: '900', marginTop: 5 },
+  bpm: { color: '#f5c76b', fontSize: 28, fontWeight: '900' },
+  unit: { color: '#aebdca', fontSize: 12, fontWeight: '700' },
+  beats: { flexDirection: 'row', gap: 8, marginVertical: 18 },
+  beat: { flex: 1, height: 5, borderRadius: 3, backgroundColor: '#344556' },
+  beatActive: { backgroundColor: '#31c778' },
+  controls: { flexDirection: 'row', gap: 8 },
+  adjust: { flex: 1, alignItems: 'center', backgroundColor: '#273746', borderRadius: 9, paddingVertical: 10 },
+  adjustText: { color: '#fff', fontWeight: '800' },
+  play: { alignItems: 'center', backgroundColor: '#31c778', borderRadius: 11, paddingVertical: 13, marginTop: 14 },
+  stop: { backgroundColor: '#9b3b42' },
+  playText: { color: '#07130d', fontWeight: '900' },
+  hint: { color: '#8494a6', fontSize: 12, lineHeight: 18, marginTop: 12 },
 });
