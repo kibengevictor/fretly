@@ -1,8 +1,13 @@
 import { defineConfig } from "@neon/config/v1";
 
 export default defineConfig({
-  // Declare your Neon services here
   auth: false,
+  functions: {
+    api: {
+      name: "fretly api",
+      source: "functions/fretly-api",
+    },
+  },
   // Branch policy: per-branch tuning
   branch: (branch) => {
     if (branch.isDefault) {
